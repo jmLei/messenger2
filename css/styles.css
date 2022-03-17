@@ -1,0 +1,64 @@
+/* Elecment Selector */
+body {
+  font-family: "Roboto";
+  text-align: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+}
+
+.login {
+  padding: 40px 20px;
+  margin: 200px auto;
+  width: 40%;
+  border: 2px solid rgb(0, 98, 128);
+  border-radius: 20px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+/* Login Form */
+.login-form {
+  font-weight: bold;
+  margin: 10px;
+}
+
+.login-form input {
+  width: 60%;
+  padding: 8px 10px;
+  margin: 8px 5px;
+  height: 1.5rem;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+.login-form input:focus {
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.login-form button {
+  background-color: #006280;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  font-size: 16px;
+  transition-duration: 200ms;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid #006280;
+}
