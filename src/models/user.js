@@ -9,4 +9,5 @@ const userSchema = new mongoose.Schema({
 
 })
 
+// Exporting user schema so other files can use it.
 module.exports = mongoose.model("User", userSchema)
