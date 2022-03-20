@@ -3,7 +3,9 @@
 - Node.js
     - mongoose package used to connect to MongoDB
 
-# User Schema
+# Brainstorming
+
+## User Schema
 
 ```
 User: {
@@ -14,7 +16,7 @@ User: {
 }
 ```
 
-# User API
+## User API
 
 - GET    ```/user```      (Retrieves all users)       
 - GET    ```/user/{id}``` (Retrieves a user with a specific id)
@@ -26,14 +28,14 @@ User: {
     - Add to conversations:        ```{ "op": "add",    "path": "/conversations",   "value": {chatroomId} }```
     - Remove from friend requests: ```{ "op": "remove", "path": "/friend-requests", "value": {userId}     }```
   
-# Conversation Schema
+## Conversation Schema
 ```
 Conversation: {
     _id: ObjectId,
     messages: { timestamp: Timestamp, from: {userId}, body: String}
 }
 ```
-# Conversation API
+## Conversation API
 
 - GET   ```/conversation/{id}``` (Retrieves a conversation with a specific conversationId)
 - PATCH ```/conversation/{id}``` (Partially updates a conversation with a specific conversationId)
