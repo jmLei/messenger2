@@ -44,7 +44,13 @@ Conversation: {
 }
 ```
 ## Conversation API
+```
+GET /conversations/{id} (Retrieves a conversation with a specific conversationId)
 
-- GET   ```/conversation/{id}``` (Retrieves a conversation with a specific conversationId)
-- PATCH ```/conversation/{id}``` (Partially updates a conversation with a specific conversationId)
-    - Add to messages: ```{ "op": "add", "path": "/messages", "value": { "timestamp": Timestamp, "from": {userId}, "body": String }}```
+PATCH /conversations/{id} (Partially updates a conversation with a specific conversationId)
+PATCH body format:
+- Add to messages: { "op": "add", "path": "/messages", "value": { "timestamp": Timestamp, "from": {userId}, "body": String }}
+
+POST /conversations
+POST body format: { "name": String }
+```
