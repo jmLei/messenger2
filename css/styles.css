@@ -1,4 +1,4 @@
-/* Elecment Selector */
+/* Element Selector */
 body {
   font-family: "Roboto";
   text-align: center;
@@ -61,4 +61,23 @@ h6 {
   background-color: white;
   color: black;
   border: 1px solid #006280;
+}
+
+/*-------------------------*/
+/****** Chatroom.html ******/
+
+.chatroom-container {
+  display: flex
+}
+
+.chatroom-container .left-panel {
+  width: 30vw;
+}
+
+.chatroom-container .center-panel {
+  width: 40vw;
+}
+
+.chatroom-container .right-panel {
+  width: 30vw;
 }
