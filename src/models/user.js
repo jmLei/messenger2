@@ -1,4 +1,4 @@
-const mongoose = require("mongoose") // Importing the mongoose package.
+const mongoose = require("mongoose"); // Importing the mongoose package.
 
 const userSchema = new mongoose.Schema({
     _id: String,                            
@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
                                             // who sent a friend request
     conversations: [ { type: String } ]     // List contains ID of each conversation user is in.
 
-})
+});
 
 // Exporting user schema so other files can use it.
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("User", userSchema);

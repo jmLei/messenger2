@@ -45,6 +45,12 @@ const server = http.createServer((req, res) => {
             res.end();
         })
     }
+    // HEAD /users/{userId}
+    // Check if userId exists.
+    // If userId exists, return 200. Else, return 404.
+    else if(method === "HEAD" && resource === "users" && id !== "") {
+        // TODO
+    }
     // POST localhost:8080/user => Create a new user
     else if(method === "POST" && resource === "users") {
 
@@ -111,6 +117,11 @@ const server = http.createServer((req, res) => {
                 
             }
         })
+    }
+    // GET /conversations/{conversationId}
+    // Retrieves a conversation with a specific conversationId 
+    else if(method === "GET" && resource === "conversations" && id !== "") {
+        
     }
 
 }).listen(port, (error) => {
