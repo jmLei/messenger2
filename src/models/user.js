@@ -5,7 +5,9 @@ const userSchema = new mongoose.Schema({
     friendList: [ { type: String } ],       // List contains user ID of each friend
     friendRequests: [ { type: String } ],   // List contains user ID of each user
                                             // who sent a friend request
-    conversations: [ { type: String } ]     // List contains ID of each conversation user is in.
+
+    conversations: [ { type: String } ]     // List of conversationIds
+                                            // user belongs to
 
 });
 

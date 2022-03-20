@@ -1,6 +1,10 @@
 const http = require("http");          // Importing http library
 const mongoose = require("mongoose");  // Importing mongoose library
 const User = require("./models/user"); // Importing user schema
+
+// Importing controllers.
+const conversationController = require("./controller/conversationController");
+
 const port = 8080;
 
 // Connects to MongoDB database named "messenger"
@@ -133,9 +137,41 @@ const server = http.createServer((req, res) => {
     }
     */
     else if(method === "POST" && resource === "conversations") {
+        let body = [];
 
+        req.on("data", (chunk) => {
+            body.push(chunk);
+        }).on("end", () => {
+            body = Buffer.concat(body).toString();
+            body = JSON.parse(body);
+            conversationController.createConversation(body, res);
+        })
     }
+    // PATCH /conversations/{conversationId}
+    // Adds a message to a conversation document.
+    else if(method === "PATCH" && resource === "conversations" && id !== "") {
 
+        let body = [];
+
+        req.on("data", (chunk) => {
+            body.push(chunk);
+        }).on("end", () => {
+            body = Buffer.concat(body).toString();
+            body = JSON.parse(body);
+            
+            const op = body.op;
+            const path = body.path;
+            const value = JSON.stringify(body.value);
+
+            console.log(`op = ${op}`);
+            console.log(`path = ${path}`);
+            console.log(`value = ${value}`);
+
+            if(op === "add" && path === "/messages") {
+                conversationController.addMessage(body.value, id);
+            }
+        })
+    }
 }).listen(port, (error) => {
 
     if(error) {
