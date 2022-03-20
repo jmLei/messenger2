@@ -5,7 +5,7 @@ const port = 8080;
 
 // Connects to MongoDB database named "messenger"
 // located at localhost:27017
-mongoose.connect("mongodb://localhost:27017/messenger")
+mongoose.connect("mongodb://127.0.0.1:27017/messenger")
 const db = mongoose.connection
 
 db.on("error", (error) => {
@@ -77,6 +77,40 @@ const server = http.createServer((req, res) => {
             console.log("Error: ", error)
         })
 
+    }
+    // PATCH localhost:8080/user => Partially updates an existing user
+    // body must contain op, path, and value fields
+    // op is the operation: 
+    // "add" adds value into an object or array
+    // "remove" removes a value from an object or array
+    // "replace" replaces a value
+    // "copy" copies a value from one location to another
+    // "move" moves a value from one location to another
+    // "test" tests for equality with a value from a different location
+    // path is the field being modified
+    // value is the value used with the operation
+    else if(method === "PATCH" && resource === "users" && id !== "") {
+        console.log("PATCH /user");
+        let body = [];
+
+        req.on("data", (chunk) => {
+            body.push(chunk);
+        }).on("end", () => {
+            body = Buffer.concat(body).toString();
+            body = JSON.parse(body);
+            
+            const op = body.op;
+            const path = body.path;
+            const value = body.value;
+
+            console.log(`op = ${op}`);
+            console.log(`path = ${path}`);
+            console.log(`value = ${value}`);
+
+            if(op === "add") {
+                
+            }
+        })
     }
 
 }).listen(port, (error) => {
