@@ -17,21 +17,29 @@ User: {
 ```
 
 ## User API
+```
+GET   /users          (Retrieves all users)       
+GET   /users/{userId} (Retrieves a user with a specific id)
 
-- GET    ```/user```      (Retrieves all users)       
-- GET    ```/user/{id}``` (Retrieves a user with a specific id)
-- POST   ```/user```      (Create a user) 
-    - ```{ "_id": {userId}, "friendList: [], "friendRequests": [], "conversations": [] }```
-- PATCH  ```/user/{id}``` (Partially Updates user a specific userId)
-    - Add to friend list:          ```{ "op": "add",    "path": "/friend-list",     "value": {userId}     }```
-    - Add to friend requests:      ```{ "op": "add",    "path": "/friend-requests", "value": {userId}     }```
-    - Add to conversations:        ```{ "op": "add",    "path": "/conversations",   "value": {chatroomId} }```
-    - Remove from friend requests: ```{ "op": "remove", "path": "/friend-requests", "value": {userId}     }```
+HEAD  /users/{userId} (Checks if userId exists. Returns 200 if exists. Otherwise, returns 404.)
+
+POST  /users          (Create a user) 
+POST body format: 
+- { "_id": {userId}, "friendList: [], "friendRequests": [], "conversations": [] }
+
+PATCH /users/{userId} (Partially Updates user a specific userId)
+PATCH body format:
+- Add to friend list:          { "op": "add",    "path": "/friend-list",     "value": {userId}     }
+- Add to friend requests:      { "op": "add",    "path": "/friend-requests", "value": {userId}     }
+- Add to conversations:        { "op": "add",    "path": "/conversations",   "value": {chatroomId} }
+- Remove from friend requests: { "op": "remove", "path": "/friend-requests", "value": {userId}     }
+```
   
 ## Conversation Schema
 ```
 Conversation: {
     _id: ObjectId,
+    name: String,
     messages: { timestamp: Timestamp, from: {userId}, body: String}
 }
 ```
