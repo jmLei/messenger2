@@ -52,5 +52,5 @@ PATCH body format:
 - Add to messages: { "op": "add", "path": "/messages", "value": { "timestamp": Timestamp, "from": {userId}, "body": String }}
 
 POST /conversations
-POST body format: { "name": String }
+POST body format: { "name": String, "messages": [] }
 ```

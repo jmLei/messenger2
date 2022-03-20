@@ -124,6 +124,18 @@ const server = http.createServer((req, res) => {
         
     }
 
+    // POST /conversations
+    // Create a new conversation.
+    /*
+    body format = { 
+        "name": String, 
+        "messages": [] 
+    }
+    */
+    else if(method === "POST" && resource === "conversations") {
+
+    }
+
 }).listen(port, (error) => {
 
     if(error) {
