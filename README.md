@@ -5,7 +5,6 @@
 When user submits userId form located on index.html:
 - Redirect to chatroom.html
 
-<<<<<<< HEAD
 ## chatroom.html
 ```
 When user enters page:
@@ -23,8 +22,6 @@ Retrieves a user's friend list, friend requests, and conversationIds.
 For each conversationId, retrieve all of the conversation names.
 ```
 
-
-=======
 ## User API
 ```
 GET   /users          (Retrieves all users)       
