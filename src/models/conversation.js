@@ -11,5 +11,6 @@ const conversationSchema = new mongoose.Schema({
     ]
 });
 
-// Exporting conversation schema.
+// Exporting conversation model.
+// Models are constructors compiled from the schema definition.
 module.exports = mongoose.model("Conversation", conversationSchema);

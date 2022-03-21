@@ -32,61 +32,20 @@ const server = http.createServer((req, res) => {
     // GET localhost:8080/user => Read all users
     if(method === "GET" && resource === "users" && id === "") {
         console.log("GET /users");
-
-        User.find().then((users) => {
-            res.writeHead(200, {"Content-Type": "application/json"});
-            res.write(JSON.stringify(users));
-            res.end();
-        });
     } 
     // GET localhost:8080/user/{id} => Read a user where id = {id}
     else if(method === "GET" && resource === "users" && id !== "") {
         console.log(`GET users/${id}`);
-
-        User.findById(id).then((user) => {
-            res.writeHead(200, {"Content-Type": "application/json"});
-            res.write(JSON.stringify(user));
-            res.end();
-        })
     }
     // HEAD /users/{userId}
     // Check if userId exists.
     // If userId exists, return 200. Else, return 404.
     else if(method === "HEAD" && resource === "users" && id !== "") {
-        // TODO
+        console.log(`HEAD users/${id}`);
     }
     // POST localhost:8080/user => Create a new user
     else if(method === "POST" && resource === "users") {
-
         console.log("POST /user")
-
-        // Request implements ReadableStream interface
-        // To get request body, read data from the stream
-        let body = []
-
-        req.on("data", (chunk) => {
-            body.push(chunk)
-        }).on("end", () => {
-            body = Buffer.concat(body).toString()
-            body = JSON.parse(body)
-
-            // Inserting user into MongoDB database.
-            const user = new User(body)
-            user.save((error) => {
-                if(error) {
-                    console.log("Error: ", error)
-                    res.writeHead(400)
-                    res.end()
-                } else {
-                    res.writeHead(200)
-                    res.end()
-                }
-            })
-            
-        }).on("error", (error) => {
-            console.log("Error: ", error)
-        })
-
     }
     // PATCH localhost:8080/user => Partially updates an existing user
     // body must contain op, path, and value fields
@@ -101,56 +60,24 @@ const server = http.createServer((req, res) => {
     // value is the value used with the operation
     else if(method === "PATCH" && resource === "users" && id !== "") {
         console.log("PATCH /user");
-        let body = [];
-
-        req.on("data", (chunk) => {
-            body.push(chunk);
-        }).on("end", () => {
-            body = Buffer.concat(body).toString();
-            body = JSON.parse(body);
-            
-            const op = body.op;
-            const path = body.path;
-            const value = body.value;
-
-            console.log(`op = ${op}`);
-            console.log(`path = ${path}`);
-            console.log(`value = ${value}`);
-
-            if(op === "add") {
-                
-            }
-        })
     }
     // GET /conversations/{conversationId}
     // Retrieves a conversation with a specific conversationId 
     else if(method === "GET" && resource === "conversations" && id !== "") {
-        
+        console.log(`GET /conversations/${id}`)
+        conversationController.getConversation(id, res);
     }
-
     // POST /conversations
     // Create a new conversation.
-    /*
-    body format = { 
-        "name": String, 
-        "messages": [] 
-    }
-    */
+    // Body format: { "name": String, "messages": [] }
     else if(method === "POST" && resource === "conversations") {
-        let body = [];
-
-        req.on("data", (chunk) => {
-            body.push(chunk);
-        }).on("end", () => {
-            body = Buffer.concat(body).toString();
-            body = JSON.parse(body);
-            conversationController.createConversation(body, res);
-        })
+        console.log("POST /conversations");
+        conversationController.createConversation(req, res);
     }
     // PATCH /conversations/{conversationId}
     // Adds a message to a conversation document.
     else if(method === "PATCH" && resource === "conversations" && id !== "") {
-
+        console.log(`PATCH /conversations/${id}`);
         let body = [];
 
         req.on("data", (chunk) => {

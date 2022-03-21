@@ -1,3 +1,4 @@
+const HelperFunctions = require("../util/helperFunctions");
 const Conversation = require("../models/conversation");
 
 module.exports = {
@@ -10,7 +11,7 @@ module.exports = {
             "body": String"
         }
     */
-    addMessage: (body, id) => {
+    addMessage: (body, id, res) => {
         Conversation.findById(id)
             .then((conversation) => {
                 conversation.messages.push(body);
@@ -28,34 +29,44 @@ module.exports = {
             "messages": [] 
         }
     */
-    createConversation: (body, res) => {
-        const conversation = new Conversation(body);
-        conversation.save((error) => {
-            if(error) {
-                // 409 status code to indicate request was received
-                // but could not be complete because of conflict
-                // with the current state of the resource
-                res.writeHead(409);
-                res.write(error);
-                res.end()
-            } else {
-                // 201 status code to indicate requested succeeded
-                // and new resouce has been created
-                res.writeHead(201);
-                res.end();
-            }
-        })
+    createConversation: (req, res) => {
+        // Using callback functions to execute code in the sequence they are called
+        HelperFunctions.parseBody(req, (body) => {
+            const conversation = new Conversation(body);
+            conversation.save((error) => {
+                if(error) {
+                    // 409 status code to indicate request was received
+                    // but could not be complete because of conflict
+                    // with the current state of the resource
+                    res.writeHead(409, { "Content-Type": "text/plain" });
+                    res.write(error);
+                    res.end()
+                } else {
+                    // 201 status code to indicate requested succeeded
+                    // and new resouce has been created
+                    res.writeHead(201);
+                    res.end();
+                }
+            })
+        });
     },
 
     // Gets a conversation document with a specific id.
-    getConversation: (id) => {
-        Conversation.findById(id)
-            .then((conversation) => {
-                return conversation;
-            })
-            .catch((error) => {
+    getConversation: (id, res) => {
+        console.log("conversationController.getConversation");
+        Conversation.findById(id, (error, document) => {
+            if(error) {
                 console.log(error);
-            });
+                res.writeHead(404, { "Content-Type": "text/plain" });
+                res.write(error);
+                res.end();
+            } 
+            else {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.write(JSON.stringify(document));
+                res.end();
+            }
+        })
     },
 
 }
