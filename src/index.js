@@ -1,6 +1,7 @@
 const http = require("http");          // Importing http library
 const mongoose = require("mongoose");  // Importing mongoose library
 
+// Importing controllers
 const conversationController = require("./controller/conversationController");
 const userController = require("./controller/userController");
 
@@ -59,6 +60,29 @@ const server = http.createServer((req, res) => {
     // value is the value used with the operation
     else if(method === "PATCH" && resource === "users" && id !== "") {
         console.log("PATCH /user");
+
+        HelperFunctions.parseBody(req, (body) => {
+            const op = body.op;
+            const path = body.path;
+            const value = body.value;
+
+            console.log(`op = ${op}`);
+            console.log(`path = ${path}`);
+
+            if(op === "add" && path === "/friend-list") {
+                userController.addFriend(value, id, res);
+            }
+            else if(op === "add" && path === "/friend-requests") {
+                console.log("Adding friend request");
+                userController.addFriendRequest(value, id, res);
+            }
+            else if(op === "add" && path === "/conversations") {
+                userController.addConversation(value, id, res);
+            }
+            else if(op === "remove" && path === "/friend-requests") {
+                userController.removeFriendRequest(value, id, res);
+            }
+        });
     }
     // GET /conversations/{conversationId}
     // Retrieves a conversation with a specific conversationId 
