@@ -128,4 +128,19 @@ module.exports = {
             }
         );
     },
+
+    // Checks if a user exists.
+    userExists: (id, res) => {
+        console.log("userExists");
+        User.exists({_id: id}, (error, document) => {
+            if(error || document === null) {
+                res.writeHead(404);
+                res.end();
+            } 
+            else {
+                res.writeHead(200);
+                res.end();
+            }
+        });
+    },
 };

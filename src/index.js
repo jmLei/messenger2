@@ -33,18 +33,16 @@ const server = http.createServer((req, res) => {
 
     // GET localhost:8080/user/{id} => Read a user where id = {id}
     if(method === "GET" && resource === "users" && id !== "") {
-        console.log(`GET users/${id}`);
         userController.getUser(id, res);
     }
     // HEAD /users/{userId}
     // Check if userId exists.
     // If userId exists, return 200. Else, return 404.
     else if(method === "HEAD" && resource === "users" && id !== "") {
-        console.log(`HEAD users/${id}`);
+        userController.userExists(id, res);
     }
     // POST localhost:8080/user => Create a new user
     else if(method === "POST" && resource === "users") {
-        console.log("POST /user")
         userController.createUser(req, res);
     }
     // PATCH localhost:8080/user => Partially updates an existing user
@@ -59,8 +57,6 @@ const server = http.createServer((req, res) => {
     // path is the field being modified
     // value is the value used with the operation
     else if(method === "PATCH" && resource === "users" && id !== "") {
-        console.log("PATCH /user");
-
         HelperFunctions.parseBody(req, (body) => {
             const op = body.op;
             const path = body.path;
@@ -73,7 +69,6 @@ const server = http.createServer((req, res) => {
                 userController.addFriend(value, id, res);
             }
             else if(op === "add" && path === "/friend-requests") {
-                console.log("Adding friend request");
                 userController.addFriendRequest(value, id, res);
             }
             else if(op === "add" && path === "/conversations") {
@@ -87,20 +82,17 @@ const server = http.createServer((req, res) => {
     // GET /conversations/{conversationId}
     // Retrieves a conversation with a specific conversationId 
     else if(method === "GET" && resource === "conversations" && id !== "") {
-        console.log(`GET /conversations/${id}`)
         conversationController.getConversation(id, res);
     }
     // POST /conversations
     // Create a new conversation.
     // Body format: { "name": String, "messages": [] }
     else if(method === "POST" && resource === "conversations") {
-        console.log("POST /conversations");
         conversationController.createConversation(req, res);
     }
     // PATCH /conversations/{conversationId}
     // Adds a message to a conversation document.
     else if(method === "PATCH" && resource === "conversations" && id !== "") {
-        console.log(`PATCH /conversations/${id}`);
         HelperFunctions.parseBody(req, (body) => {
 
             const op = body.op;
@@ -111,7 +103,6 @@ const server = http.createServer((req, res) => {
                 conversationController.addMessage(value, id, res);
             }
         });
-        
     }
 }).listen(port, (error) => {
     if(error) {
