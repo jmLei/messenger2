@@ -4,7 +4,7 @@ const conversationSchema = new mongoose.Schema({
     name: String,
     messages: [
         { 
-            timestamp: String, 
+            timestamp: Date, 
             from: String,
             body: String
         }

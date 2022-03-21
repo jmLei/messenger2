@@ -2,6 +2,8 @@ const http = require("http");          // Importing http library
 const mongoose = require("mongoose");  // Importing mongoose library
 
 const conversationController = require("./controller/conversationController");
+const userController = require("./controller/userController");
+
 const HelperFunctions = require("./util/helperFunctions");
 
 const port = 8080;
@@ -28,13 +30,10 @@ const server = http.createServer((req, res) => {
     const resource = (1 < url.length) ? url[1] : "";
     const id = (2 < url.length) ? url[2] : "";
 
-    // GET localhost:8080/user => Read all users
-    if(method === "GET" && resource === "users" && id === "") {
-        console.log("GET /users");
-    } 
     // GET localhost:8080/user/{id} => Read a user where id = {id}
-    else if(method === "GET" && resource === "users" && id !== "") {
+    if(method === "GET" && resource === "users" && id !== "") {
         console.log(`GET users/${id}`);
+        userController.getUser(id, res);
     }
     // HEAD /users/{userId}
     // Check if userId exists.
@@ -45,6 +44,7 @@ const server = http.createServer((req, res) => {
     // POST localhost:8080/user => Create a new user
     else if(method === "POST" && resource === "users") {
         console.log("POST /user")
+        userController.createUser(req, res);
     }
     // PATCH localhost:8080/user => Partially updates an existing user
     // body must contain op, path, and value fields
@@ -90,11 +90,9 @@ const server = http.createServer((req, res) => {
         
     }
 }).listen(port, (error) => {
-
     if(error) {
         console.log("Error: ", error)
     } else {
         console.log(`Server listening on port ${port}.`)
     }
-
-})
+});
