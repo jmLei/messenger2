@@ -1,9 +1,8 @@
 const http = require("http");          // Importing http library
 const mongoose = require("mongoose");  // Importing mongoose library
-const User = require("./models/user"); // Importing user schema
 
-// Importing controllers.
 const conversationController = require("./controller/conversationController");
+const HelperFunctions = require("./util/helperFunctions");
 
 const port = 8080;
 
@@ -78,26 +77,17 @@ const server = http.createServer((req, res) => {
     // Adds a message to a conversation document.
     else if(method === "PATCH" && resource === "conversations" && id !== "") {
         console.log(`PATCH /conversations/${id}`);
-        let body = [];
+        HelperFunctions.parseBody(req, (body) => {
 
-        req.on("data", (chunk) => {
-            body.push(chunk);
-        }).on("end", () => {
-            body = Buffer.concat(body).toString();
-            body = JSON.parse(body);
-            
             const op = body.op;
             const path = body.path;
-            const value = JSON.stringify(body.value);
-
-            console.log(`op = ${op}`);
-            console.log(`path = ${path}`);
-            console.log(`value = ${value}`);
+            const value = body.value;
 
             if(op === "add" && path === "/messages") {
-                conversationController.addMessage(body.value, id);
+                conversationController.addMessage(value, id, res);
             }
-        })
+        });
+        
     }
 }).listen(port, (error) => {
 

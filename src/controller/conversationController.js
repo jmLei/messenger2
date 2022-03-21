@@ -4,31 +4,30 @@ const Conversation = require("../models/conversation");
 module.exports = {
 
     // Adds a message to a conversation document.
-    /*
-        Body format = {
-            "timestamp": Date,
-            "from": String,
-            "body": String"
-        }
-    */
-    addMessage: (body, id, res) => {
-        Conversation.findById(id)
-            .then((conversation) => {
-                conversation.messages.push(body);
-                console.log("Message added.");
-            })
-            .catch(error => {
+    // Body format = { "timestamp": Date, "from": String, "body": String" }
+    addMessage: (value, id, res) => {
+
+        Conversation.findById(id, (error, document) => {
+            if(error) {
                 console.log(error);
-            })
+            } else {
+                document.messages.push(value);
+                document.save((error) => {
+                    if(error) {
+                        res.writeHead(409, { "Content-Type": "text/plain" });
+                        res.write(error);
+                        res.end();
+                    } else {
+                        res.writeHead(201);
+                        res.end();
+                    }
+                });
+            }
+        });
     },
 
     // Creates a conversation document.
-    /*
-        body format = { 
-            "name": String, 
-            "messages": [] 
-        }
-    */
+    // body format = { "name": String, "messages": [] }
     createConversation: (req, res) => {
         // Using callback functions to execute code in the sequence they are called
         HelperFunctions.parseBody(req, (body) => {
