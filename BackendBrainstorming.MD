@@ -60,4 +60,3 @@ PATCH body format:
 POST /conversations
 POST body format: { "name": String, "messages": [] }
 ```
->>>>>>> main
