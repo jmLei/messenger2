@@ -8,34 +8,33 @@ redirect();
 
 const loginFormButton = document.getElementById("login-form-button");
 
-loginFormButton.addEventListener("click", (event) => {
+loginFormButton.addEventListener("click", async (event) => {
     event.preventDefault();
-    const name = document.getElementById("name").value;
-
-    fetch(`http://localhost:8080/users/${name}`, { method: "HEAD"})
-    .then((response) => {
-
-        if(!response.ok) {
-            
-            fetch("http://localhost:8080/users", { 
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "_id": name,
-                    "friendList": [],
-                    "friendRequests": [],
-                    "conversations": []
-                })
-            });
-            
-        } 
-    })
-    .catch((error) => {
-        console.log(error);
-    });
-
-    localStorage.setItem("id", name);
+    const id = document.getElementById("name").value;
+    console.log("loginFormButton")
+    
+    let response = await fetch(`http://localhost:8080/users/${id}`, { method: "HEAD"});
+    
+    // User id exists.
+    if(response.status === 200) { 
+        // Do nothing.
+    }
+    // User id does not exist.
+    else if(response.status == 404) {
+        response = await fetch("http://localhost:8080/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                _id: id,
+                friendList: [],
+                friendRequests: [],
+                conversations: []
+            })
+        }); 
+    }
+    
+    localStorage.setItem("id", id);
     redirect();
 });

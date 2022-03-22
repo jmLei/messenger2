@@ -32,10 +32,10 @@ const server = http.createServer((req, res) => {
     const resource = (1 < url.length) ? url[1] : "";
     const id = (2 < url.length) ? url[2] : "";
 
+    console.log(method);
     console.log(req.url);
 
     if(req.url === "/" || req.url === "/index.html") {
-        console.log(req.session);
         fs.readFile("./src/static/index.html", (error, html) => {
             if(error) {
                 console.log(error);
@@ -90,6 +90,17 @@ const server = http.createServer((req, res) => {
             }
         })
     }
+    else if(req.url === "/scripts/userApi.js") {
+        fs.readFile("./src/static/scripts/userApi.js", (error, js) => {
+            if(error) {
+                console.log(error);
+            } else {
+                res.writeHead(200, {"Content-Type": "text/javascript"});
+                res.write(js);
+                res.end();
+            }
+        })
+    }
     // GET localhost:8080/user/{id} => Read a user where id = {id}
     else if(method === "GET" && resource === "users" && id !== "") {
         userController.getUser(id, res);
@@ -98,6 +109,7 @@ const server = http.createServer((req, res) => {
     // Check if userId exists.
     // If userId exists, return 200. Else, return 404.
     else if(method === "HEAD" && resource === "users" && id !== "") {
+        console.log(`HEAD /users/${id}`);
         userController.userExists(id, res);
     }
     // POST localhost:8080/user => Create a new user
