@@ -1,5 +1,6 @@
-const http = require("http");          // Importing http library
-const mongoose = require("mongoose");  // Importing mongoose library
+const http = require("http");           // Importing http library
+const fs = require("fs");
+const mongoose = require("mongoose");   // Importing mongoose library
 
 // Importing controllers
 const conversationController = require("./controller/conversationController");
@@ -31,8 +32,31 @@ const server = http.createServer((req, res) => {
     const resource = (1 < url.length) ? url[1] : "";
     const id = (2 < url.length) ? url[2] : "";
 
+    if(req.url === "/" || req.url === "/index.html") {
+
+        fs.readFile("./src/static/index.html", (error, html) => {
+            if(error) {
+                console.log(error);
+            } else {
+                res.writeHead(200, {"Content-Type": "text/html"});
+                res.write(html);
+                res.end();
+            }
+        });
+    }
+    else if(req.url === "/css/styles.css") {
+        fs.readFile("./src/static/css/styles.css", (error, css) => {
+            if(error) {
+                console.log(error);
+            } else {
+                res.writeHead(200, {"Content-Type": "text/css"});
+                res.write(css);
+                res.end();
+            }
+        });
+    }
     // GET localhost:8080/user/{id} => Read a user where id = {id}
-    if(method === "GET" && resource === "users" && id !== "") {
+    else if(method === "GET" && resource === "users" && id !== "") {
         userController.getUser(id, res);
     }
     // HEAD /users/{userId}
