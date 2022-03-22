@@ -35,8 +35,19 @@ const server = http.createServer((req, res) => {
     console.log(req.url);
 
     if(req.url === "/" || req.url === "/index.html") {
-
+        console.log(req.session);
         fs.readFile("./src/static/index.html", (error, html) => {
+            if(error) {
+                console.log(error);
+            } else {
+                res.writeHead(200, {"Content-Type": "text/html"});
+                res.write(html);
+                res.end();
+            }
+        });
+    }
+    else if(req.url === "/chatroom.html") {
+        fs.readFile("./src/static/chatroom.html", (error, html) => {
             if(error) {
                 console.log(error);
             } else {
@@ -59,6 +70,17 @@ const server = http.createServer((req, res) => {
     }
     else if(req.url === "/scripts/script.js") {
         fs.readFile("./src/static/scripts/script.js", (error, js) => {
+            if(error) {
+                console.log(error);
+            } else {
+                res.writeHead(200, {"Content-Type": "text/javascript"});
+                res.write(js);
+                res.end();
+            }
+        })
+    }
+    else if(req.url === "/scripts/chatroom.js") {
+        fs.readFile("./src/static/scripts/chatroom.js", (error, js) => {
             if(error) {
                 console.log(error);
             } else {
