@@ -51,14 +51,14 @@ module.exports = {
     },
 
     // Adds a friend request to the user's list of friend requests.
-    addFriendRequest: (value, id, res) => {
+    addIncomingFriendRequest: (value, id, res) => {
         User.findById(id, (error, document) => {
             if(error) {
                 res.writeHead(409, {"Content-Type": "text/plain"});
                 res.write(error);
                 res.end();
             } else {
-                document.friendRequests.push(value);
+                document.incomingFriendRequests.push(value);
                 document.save((error) => {
                     if(error) {
                         res.writeHead(409, {"Content-Type": "text/plain"});
@@ -66,10 +66,33 @@ module.exports = {
                         res.end();
                     } else {
                         res.writeHead(200, {"Content-Type": "application/json"});
-                        res.write(JSON.stringify({ message: "Successfully added friend request."}));
+                        res.write(JSON.stringify({ message: "Successfully added incoming friend request."}));
                         res.end();
                     }
                 })
+            }
+        });
+    },
+
+    addOutgoingFriendRequest: (value, id, res) => {
+        User.findById(id, (error, document) => {
+            if(error) {
+                res.writeHead(409, {"Content-Type": "text/plain"});
+                res.write(error);
+                res.end();
+            } else {
+                document.outgoingFriendRequests.push(value);
+                document.save((error) => {
+                    if(error) {
+                        res.writeHead(409, {"Content-Type": "text/plain"});
+                        res.write(error);
+                        res.end();
+                    } else {
+                        res.writeHead(200, {"Content-Type": "application/json"});
+                        res.write(JSON.stringify({ message: "Successfully added outgoing friend request."}));
+                        res.end();
+                    }
+                });
             }
         });
     },
@@ -110,10 +133,10 @@ module.exports = {
     },
 
     // Removes a friend request from the user's list of friend requests.
-    removeFriendRequest: (value, id, res) => {
+    removeIncomingFriendRequest: (value, id, res) => {
         User.findOneAndUpdate(
             { _id: id },
-            { $pull: { friendRequests: value }},
+            { $pull: { incomingFriendRequests: value }},
             { safe: true, multi: false },
             (error, document) => {
                 if(error) {
@@ -122,7 +145,26 @@ module.exports = {
                     res.end();
                 } else {
                     res.writeHead(200, {"Content-Type": "application/json"});
-                    res.write(JSON.stringify({ message: "Successfully removed friend request."}));
+                    res.write(JSON.stringify({ message: "Successfully removed incoming friend request."}));
+                    res.end();
+                }
+            }
+        );
+    },
+
+    removeOutgoingFriendRequest: (value, id, res) => {
+        User.findOneAndUpdate(
+            { _id: id },
+            { $pull: { outgoingFriendRequests: value }},
+            { safe: true, multi: false },
+            (error, document) => {
+                if(error) {
+                    res.writeHead(404, { "Content-Type": "text/plain" });
+                    res.write(error);
+                    res.end();
+                } else {
+                    res.writeHead(200, {"Content-Type": "application/json"});
+                    res.write(JSON.stringify({ message: "Successfully removed outgoing friend request."}));
                     res.end();
                 }
             }

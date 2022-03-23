@@ -29,7 +29,8 @@ loginFormButton.addEventListener("click", async (event) => {
             body: JSON.stringify({
                 _id: id,
                 friendList: [],
-                friendRequests: [],
+                incomingFriendRequests: [],
+                outgoingFriendRequests: [],
                 conversations: []
             })
         }); 

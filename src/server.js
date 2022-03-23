@@ -32,9 +32,6 @@ const server = http.createServer((req, res) => {
     const resource = (1 < url.length) ? url[1] : "";
     const id = (2 < url.length) ? url[2] : "";
 
-    console.log(method);
-    console.log(req.url);
-
     if(req.url === "/" || req.url === "/index.html") {
         fs.readFile("./src/static/index.html", (error, html) => {
             if(error) {
@@ -139,14 +136,20 @@ const server = http.createServer((req, res) => {
             if(op === "add" && path === "/friend-list") {
                 userController.addFriend(value, id, res);
             }
-            else if(op === "add" && path === "/friend-requests") {
-                userController.addFriendRequest(value, id, res);
+            else if(op === "add" && path === "/incoming-friend-requests") {
+                userController.addIncomingFriendRequest(value, id, res);
+            }
+            else if(op === "add" && path === "/outgoing-friend-requests") {
+                userController.addOutgoingFriendRequest(value, id, res);
             }
             else if(op === "add" && path === "/conversations") {
                 userController.addConversation(value, id, res);
             }
-            else if(op === "remove" && path === "/friend-requests") {
-                userController.removeFriendRequest(value, id, res);
+            else if(op === "remove" && path === "/incoming-friend-requests") {
+                userController.removeIncomingFriendRequest(value, id, res);
+            }
+            else if(op === "remove" && path === "/outgoing-friend-requests") {
+                userController.removeOutgoingFriendRequest(value, id, res);
             }
         });
     }
