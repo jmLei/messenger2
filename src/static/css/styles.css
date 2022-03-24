@@ -82,9 +82,13 @@ h6 {
   width: 30vw;
 }
 
-.friend-panel {
+.box {
   border: 1px solid black;
   display: flex;
   padding: 10px;
   justify-content: space-between;
+}
+
+#conversation-form {
+  border: 1px solid black;
 }

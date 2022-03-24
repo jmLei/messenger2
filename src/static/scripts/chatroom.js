@@ -26,12 +26,16 @@ const main = async () => {
     drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
     drawIncomingFriendRequests(currentUser.incomingFriendRequests);
     drawFriendList(currentUser.friendList);
+
+    const addUserButton = document.getElementById("add-user-button");
+    addUserButton.addEventListener("click", onAddUserButtonClick);
     
     const logoutButton = document.getElementById("logout-button");
     logoutButton.addEventListener("click", onLogoutButtonClick);
 
     const sendFriendRequestButton = document.getElementById("send-friend-request-button");
     sendFriendRequestButton.addEventListener("click", onsendFriendRequestButtonClick);
+
 };
 
 const drawOutgoingFriendRequests = (outgoingFriendRequests) => {
@@ -247,6 +251,11 @@ const onsendFriendRequestButtonClick = async (event) => {
 
     // Update client about adding to outgoing friend requests list
     currentUser.outgoingFriendRequests.push(friendId);
+};
+
+const onAddUserButtonClick = (event) => {
+    event.preventDefault();
+    console.log("Add User Button Click");
 };
 
 main();
