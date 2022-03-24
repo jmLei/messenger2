@@ -32,6 +32,8 @@ const server = http.createServer((req, res) => {
     const resource = (1 < url.length) ? url[1] : "";
     const id = (2 < url.length) ? url[2] : "";
 
+    console.log(url);
+
     if(req.url === "/" || req.url === "/index.html") {
         fs.readFile("./src/static/index.html", (error, html) => {
             if(error) {
@@ -65,8 +67,8 @@ const server = http.createServer((req, res) => {
             }
         });
     }
-    else if(req.url === "/scripts/script.js") {
-        fs.readFile("./src/static/scripts/script.js", (error, js) => {
+    else if(req.url === "/scripts/index.js") {
+        fs.readFile("./src/static/scripts/index.js", (error, js) => {
             if(error) {
                 console.log(error);
             } else {
@@ -87,8 +89,8 @@ const server = http.createServer((req, res) => {
             }
         })
     }
-    else if(req.url === "/scripts/userApi.js") {
-        fs.readFile("./src/static/scripts/userApi.js", (error, js) => {
+    else if(req.url === "/scripts/user.js") {
+        fs.readFile("./src/static/scripts/user.js", (error, js) => {
             if(error) {
                 console.log(error);
             } else {
