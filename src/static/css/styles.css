@@ -82,13 +82,9 @@ h6 {
   width: 30vw;
 }
 
-.outgoing-friend-request {
+.friend-panel {
   border: 1px solid black;
   display: flex;
   padding: 10px;
   justify-content: space-between;
-}
-
-.outgoing-friend-request button {
-  width: 50%;
 }

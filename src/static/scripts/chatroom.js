@@ -1,4 +1,4 @@
-import User, {createOutgoingFriendRequestElement} from "./user.js";
+import User, {createOutgoingFriendRequestElement, createIncomingFriendRequestElement, createFriendElement} from "./user.js";
 
 var currentUser;
 
@@ -20,6 +20,8 @@ const main = async () => {
     );
 
     drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
+    drawIncomingFriendRequests(currentUser.incomingFriendRequests);
+    drawFriendList(currentUser.friendList);
     
     const logoutButton = document.getElementById("logout-button");
     logoutButton.addEventListener("click", onLogoutButtonClick);
@@ -42,6 +44,132 @@ const drawOutgoingFriendRequests = (outgoingFriendRequests) => {
        element.querySelector("button").addEventListener("click", onCancelButtonClick);
        outgoingFriendRequestsContainer.appendChild(element);
    }
+};
+
+const drawIncomingFriendRequests = (incomingFriendRequests) => {
+    console.log("Drawing Incoming Friend Requests.");
+    const container = document.getElementById("incoming-friend-requests");
+
+    // Clear out container.
+    while(container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+
+    for(let i = 0; i < currentUser.incomingFriendRequests.length; i++) {
+        const element = createIncomingFriendRequestElement(currentUser.incomingFriendRequests[i]);
+        const buttonGroup = element.querySelector("div").querySelectorAll("button");
+        buttonGroup[0].addEventListener("click", onAcceptButtonClick);
+        buttonGroup[1].addEventListener("click", onRejectButtonClick);
+        container.appendChild(element);
+    }
+};
+
+const drawFriendList = (friendList) => {
+    console.log("Drawing Friend List.");
+    const container = document.getElementById("friend-list");
+
+    // Clear out container.
+    while(container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+
+    for(let i = 0; i < currentUser.friendList.length; i++) {
+        const element = createFriendElement(currentUser.friendList[i]);
+        container.appendChild(element);
+    }
+}
+
+const onAcceptButtonClick = (event) => {
+
+    const friendId = event.target.friendId;
+
+    fetch(`http://localhost:8080/users/${friendId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            op: "remove",
+            path: "/outgoing-friend-requests",
+            value: currentUser._id
+        })
+    });
+
+    fetch(`http://localhost:8080/users/${currentUser._id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            op: "remove",
+            path: "/incoming-friend-requests",
+            value: friendId
+        })
+    });
+
+    fetch(`http://localhost:8080/users/${currentUser._id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            op: "add",
+            path: "/friend-list",
+            value: friendId
+        })
+    });
+
+    fetch(`http://localhost:8080/users/${friendId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            op: "add",
+            path: "/friend-list",
+            value: currentUser._id
+        })
+    });
+
+    const index = currentUser.incomingFriendRequests.indexOf(friendId);
+    currentUser.incomingFriendRequests.splice(index, 1);
+    currentUser.friendList.push(friendId);
+    drawIncomingFriendRequests(currentUser.incomingFriendRequests);
+    drawFriendList(currentUser.friendList);
+};
+
+const onRejectButtonClick = (event) => {
+    console.log(`${event.target.friendId} reject button clicked.`);
+
+    const friendId = event.target.friendId;
+
+    fetch(`http://localhost:8080/users/${friendId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            op: "remove",
+            path: "/outgoing-friend-requests",
+            value: currentUser._id
+        })
+    });
+
+    fetch(`http://localhost:8080/users/${currentUser._id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            op: "remove",
+            path: "/incoming-friend-requests",
+            value: friendId
+        })
+    });
+
+    const index = currentUser.incomingFriendRequests.indexOf(friendId);
+    currentUser.incomingFriendRequests.splice(index, 1);
+    drawIncomingFriendRequests(currentUser.incomingFriendRequests);
 };
 
 const onCancelButtonClick = (event) => {
