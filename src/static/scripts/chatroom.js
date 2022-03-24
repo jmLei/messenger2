@@ -19,6 +19,10 @@ const main = async () => {
         response.conversations
     );
 
+    const header = document.getElementById("my-header");
+    const text = document.createTextNode(`Welcome back, ${currentUser._id}`);
+    header.prepend(text);
+
     drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
     drawIncomingFriendRequests(currentUser.incomingFriendRequests);
     drawFriendList(currentUser.friendList);
