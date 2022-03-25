@@ -92,3 +92,8 @@ h6 {
 #conversation-form {
   border: 1px solid black;
 }
+
+.conversation {
+  height: 50px;
+  width: 100%;
+}

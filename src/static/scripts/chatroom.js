@@ -1,4 +1,5 @@
 import User, {createOutgoingFriendRequestElement, createIncomingFriendRequestElement, createFriendElement, createConversationElement} from "./user.js";
+import Conversation, {createMessageElements} from "./conversation.js";
 
 var currentUser;
 var currentConversation;
@@ -103,9 +104,15 @@ const drawConversationList = async (conversationIds) => {
 
     for(let i = 0; i < conversations.length; i++) {
         const element = createConversationElement(conversations[i]);
+        element.addEventListener("click", setCurrentConversation);
+
         conversationList.appendChild(element);
     }
 };
+
+const drawCurrentConversation = (currentConversation) => {
+
+}
 
 const acceptFriendRequest = (event) => {
 
@@ -318,6 +325,19 @@ const createConversation = async (id, friendId) => {
 
     currentUser.conversations.push(conversationId);
     drawConversationList(currentUser.conversations);
+}
+
+const setCurrentConversation = (event) => {
+    console.log("Set Current Conversation");
+    const conversation = event.target.conservation;
+
+    currentConversation = new Conversation(
+        conversation._id,
+        conversation.name,
+        conversation.messages
+    );
+
+    drawCurrentConversation(currentConversation);
 }
 
 main();

@@ -59,12 +59,8 @@ export const createFriendElement = (friend) => {
 
 export const createConversationElement = (conversation) => {
     const button = document.createElement("button");
+    button.classList.add("conversation");
     button.textContent = conversation.name;
     button.conversation = conversation;
-
-    button.addEventListener("click", (event) => {
-        console.log(event.target.conversation);
-    })
-
     return button;
 }

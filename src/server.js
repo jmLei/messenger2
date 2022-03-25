@@ -100,6 +100,17 @@ const server = http.createServer(async (req, res) => {
             }
         })
     }
+    else if(req.url === "/scripts/conversation.js") {
+        fs.readFile("./src/static/scripts/conversation.js", (error, js) => {
+            if(error) {
+                console.log(error);
+            } else {
+                res.writeHead(200, {"Content-Type": "text/javascript"});
+                res.write(js);
+                res.end();
+            }
+        })
+    }
     // GET localhost:8080/user/{id} => Read a user where id = {id}
     else if(method === "GET" && resource === "users" && id !== "") {
         userController.getUser(id, res);
