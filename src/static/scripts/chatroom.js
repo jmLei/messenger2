@@ -1,6 +1,7 @@
-import User, {createOutgoingFriendRequestElement, createIncomingFriendRequestElement, createFriendElement} from "./user.js";
+import User, {createOutgoingFriendRequestElement, createIncomingFriendRequestElement, createFriendElement, createConversationElement} from "./user.js";
 
 var currentUser;
+var currentConversation;
 
 const main = async () => {
     if(localStorage.getItem("id") === null) {
@@ -26,15 +27,13 @@ const main = async () => {
     drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
     drawIncomingFriendRequests(currentUser.incomingFriendRequests);
     drawFriendList(currentUser.friendList);
-
-    const addUserButton = document.getElementById("add-user-button");
-    addUserButton.addEventListener("click", onAddUserButtonClick);
+    drawConversationList(currentUser.conversations);
     
     const logoutButton = document.getElementById("logout-button");
     logoutButton.addEventListener("click", onLogoutButtonClick);
 
     const sendFriendRequestButton = document.getElementById("send-friend-request-button");
-    sendFriendRequestButton.addEventListener("click", onsendFriendRequestButtonClick);
+    sendFriendRequestButton.addEventListener("click", sendFriendRequest);
 
 };
 
@@ -49,7 +48,7 @@ const drawOutgoingFriendRequests = (outgoingFriendRequests) => {
 
    for(let i = 0; i < currentUser.outgoingFriendRequests.length; i++) {
        const element = createOutgoingFriendRequestElement(currentUser.outgoingFriendRequests[i]);
-       element.querySelector("button").addEventListener("click", onCancelButtonClick);
+       element.querySelector("button").addEventListener("click", cancelFriendRequest);
        outgoingFriendRequestsContainer.appendChild(element);
    }
 };
@@ -66,8 +65,8 @@ const drawIncomingFriendRequests = (incomingFriendRequests) => {
     for(let i = 0; i < currentUser.incomingFriendRequests.length; i++) {
         const element = createIncomingFriendRequestElement(currentUser.incomingFriendRequests[i]);
         const buttonGroup = element.querySelector("div").querySelectorAll("button");
-        buttonGroup[0].addEventListener("click", onAcceptButtonClick);
-        buttonGroup[1].addEventListener("click", onRejectButtonClick);
+        buttonGroup[0].addEventListener("click", acceptFriendRequest);
+        buttonGroup[1].addEventListener("click", rejectFriendRequest);
         container.appendChild(element);
     }
 };
@@ -87,7 +86,28 @@ const drawFriendList = (friendList) => {
     }
 }
 
-const onAcceptButtonClick = (event) => {
+const drawConversationList = async (conversationIds) => {
+    const conversations = [];
+
+    for(let i = 0; i < conversationIds.length; i++) {
+        const response = await fetch(`http://localhost:8080/conversations/${conversationIds[i]}`);
+        const conversation = await response.json();
+        conversations.push(conversation);
+    }
+
+    const conversationList = document.getElementById("conversation-list");
+
+    while(conversationList.firstChild) {
+        conversationList.removeChild(conversationList.firstChild);
+    }
+
+    for(let i = 0; i < conversations.length; i++) {
+        const element = createConversationElement(conversations[i]);
+        conversationList.appendChild(element);
+    }
+};
+
+const acceptFriendRequest = (event) => {
 
     const friendId = event.target.friendId;
 
@@ -139,6 +159,8 @@ const onAcceptButtonClick = (event) => {
         })
     });
 
+    createConversation(currentUser._id, friendId);
+
     const index = currentUser.incomingFriendRequests.indexOf(friendId);
     currentUser.incomingFriendRequests.splice(index, 1);
     currentUser.friendList.push(friendId);
@@ -146,7 +168,7 @@ const onAcceptButtonClick = (event) => {
     drawFriendList(currentUser.friendList);
 };
 
-const onRejectButtonClick = (event) => {
+const rejectFriendRequest = (event) => {
     console.log(`${event.target.friendId} reject button clicked.`);
 
     const friendId = event.target.friendId;
@@ -180,7 +202,7 @@ const onRejectButtonClick = (event) => {
     drawIncomingFriendRequests(currentUser.incomingFriendRequests);
 };
 
-const onCancelButtonClick = (event) => {
+const cancelFriendRequest = (event) => {
     console.log("Cancel clicked");
     const friendId = event.target.friendId;
     
@@ -219,7 +241,7 @@ const onLogoutButtonClick = (event) => {
     window.location.replace("http://localhost:8080/index.html");
 };
 
-const onsendFriendRequestButtonClick = async (event) => {
+const sendFriendRequest = async (event) => {
     event.preventDefault();
     
     const friendId = document.getElementById("friend-id").value;
@@ -251,11 +273,51 @@ const onsendFriendRequestButtonClick = async (event) => {
 
     // Update client about adding to outgoing friend requests list
     currentUser.outgoingFriendRequests.push(friendId);
+    drawOutgoingFriendRequests();
 };
 
-const onAddUserButtonClick = (event) => {
-    event.preventDefault();
-    console.log("Add User Button Click");
-};
+const createConversation = async (id, friendId) => {
+
+    let conversation = await fetch("http://localhost:8080/conversations", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: `${id} & ${friendId}`,
+            messages: []
+        })
+    });
+
+    conversation = await conversation.json();
+    const conversationId = conversation._id;
+
+    await fetch(`http://localhost:8080/users/${friendId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            op: "add",
+            path: "/conversations",
+            value: conversationId
+        })
+    });
+
+    await fetch(`http://localhost:8080/users/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            op: "add",
+            path: "/conversations",
+            value: conversationId
+        })
+    });
+
+    currentUser.conversations.push(conversationId);
+    drawConversationList(currentUser.conversations);
+}
 
 main();

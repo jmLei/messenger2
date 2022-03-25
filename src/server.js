@@ -23,7 +23,7 @@ db.once("open", () => {
     console.log("Connected to MongoDB database.");
 });
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
 
     // Routes
     const url = req.url.split("/");

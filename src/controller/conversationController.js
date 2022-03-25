@@ -46,7 +46,7 @@ module.exports = {
                     // 201 status code to indicate requested succeeded
                     // and new resouce has been created
                     res.writeHead(201, {"Content-Type": "application/json"});
-                    res.write(JSON.stringify({ message: "Successfully created conversation."}));
+                    res.write(JSON.stringify(conversation));
                     res.end();
                 }
             })
