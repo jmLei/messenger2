@@ -3,13 +3,14 @@ import Conversation, {createMessageElements} from "./conversation.js";
 
 var currentUser;
 var currentConversation;
+var socket;
 
 const main = async () => {
     if(localStorage.getItem("id") === null) {
         window.location.replace("http://localhost:8080/index.html");
     }
 
-    const socket = io();
+    socket = io();
     socket.emit("send-user-id", localStorage.getItem("id"));
     
     // Get user info.
@@ -43,6 +44,27 @@ const main = async () => {
 
     const sendMessageButton = document.getElementById("send-message");
     sendMessageButton.addEventListener("click", sendMessage);
+
+    socket.on("friend-request-cancelled", (emitterId) => {
+        const index = currentUser.incomingFriendRequests.indexOf(emitterId);
+        if(index > -1) {
+            currentUser.incomingFriendRequests.splice(index, 1);
+            drawIncomingFriendRequests(currentUser.incomingFriendRequests);
+        }
+    });
+
+    socket.on("friend-request-rejected", (emitterId) => {
+        const index = currentUser.outgoingFriendRequests.indexOf(emitterId);
+        if(index > -1) {
+            currentUser.outgoingFriendRequests.splice(index, 1);
+            drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
+        }
+    })
+
+    socket.on("receive-friend-request", (emitterId) => {
+        currentUser.incomingFriendRequests.push(emitterId);
+        drawIncomingFriendRequests(currentUser.incomingFriendRequests);
+    })
 
 };
 
@@ -230,10 +252,11 @@ const rejectFriendRequest = (event) => {
     const index = currentUser.incomingFriendRequests.indexOf(friendId);
     currentUser.incomingFriendRequests.splice(index, 1);
     drawIncomingFriendRequests(currentUser.incomingFriendRequests);
+
+    socket.emit("reject-friend-request", [currentUser._id, friendId]);
 };
 
 const cancelFriendRequest = (event) => {
-    console.log("Cancel clicked");
     const friendId = event.target.friendId;
     
     fetch(`http://localhost:8080/users/${friendId}`, {
@@ -263,6 +286,8 @@ const cancelFriendRequest = (event) => {
     const index = currentUser.outgoingFriendRequests.indexOf(friendId);
     currentUser.outgoingFriendRequests.splice(index, 1);
     drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
+
+    socket.emit("cancel-friend-request", [currentUser._id, friendId]);
 }
 
 const onLogoutButtonClick = (event) => {
@@ -304,6 +329,10 @@ const sendFriendRequest = async (event) => {
     // Update client about adding to outgoing friend requests list
     currentUser.outgoingFriendRequests.push(friendId);
     drawOutgoingFriendRequests();
+
+    // Update friend's client
+    console.log("Socket.emit(send-friend-request)");
+    socket.emit("send-friend-request", [localStorage.getItem("id"), friendId]);
 };
 
 const createConversation = async (id, friendId) => {

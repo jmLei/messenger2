@@ -30,10 +30,26 @@ const initIOServer = (httpServer) => {
 
             console.log(`${socket.username} / ${socket.id} disconnected.`);
             console.log(users);
+        });
+
+        socket.on("cancel-friend-request", (ids) => {
+            for(let i = 0; i < users.get(ids[1]).length; i++) {
+                io.to(users.get(ids[1])[i]).emit("friend-request-cancelled", ids[0]);
+            }
+        });
+
+        socket.on("reject-friend-request", (ids) => {
+            for(let i = 0; i < users.get(ids[1]).length; i++) {
+                io.to(users.get(ids[1])[i]).emit("friend-request-rejected", ids[0]);
+            }
         })
+
+        socket.on("send-friend-request", (ids) => {
+            for(let i = 0; i < users.get(ids[1]).length; i++) {
+                io.to(users.get(ids[1])[i]).emit("receive-friend-request", ids[0]);
+            }
+        });
     });
-
-
 }
 
 module.exports = initIOServer;
