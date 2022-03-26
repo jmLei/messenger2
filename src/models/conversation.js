@@ -8,6 +8,7 @@ const messageSchema = new mongoose.Schema({
 
 const conversationSchema = new mongoose.Schema({
     name: String,
+    participants: [],
     messages: [messageSchema]
 });
 

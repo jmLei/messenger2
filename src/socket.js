@@ -61,6 +61,17 @@ const initIOServer = (httpServer) => {
                 io.to(users.get(ids[1])[i]).emit("friend-request-received", ids[0]);
             }
         });
+
+        socket.on("send-message", (conversationId, participants, message) => {
+
+            for(let j = 0; j < participants.length; j++) {
+                if(participants[j] !== message.from) {
+                    for(let i = 0; i < users.get(participants[j]).length; i++) {
+                        io.to(users.get(participants[j])[i]).emit("message-received", conversationId, message);
+                    }
+                }
+            }
+        })
     });
 }
 

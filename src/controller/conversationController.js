@@ -58,7 +58,6 @@ module.exports = {
 
     // Gets a conversation document with a specific id.
     getConversation: (id, res) => {
-        console.log("conversationController.getConversation");
         Conversation.findById(id, (error, document) => {
             if(error) {
                 console.log(error);

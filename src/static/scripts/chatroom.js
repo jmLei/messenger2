@@ -81,7 +81,14 @@ const main = async () => {
             currentUser.outgoingFriendRequests.splice(index, 1);
             drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
         }
-    })
+    });
+
+    socket.on("message-received", (conversationId, message) => {
+       if(currentConversation._id === conversationId) {
+           currentConversation.messages.push(message);
+           drawCurrentConversation(currentConversation);
+       } 
+    });
 };
 
 const drawOutgoingFriendRequests = (outgoingFriendRequests) => {
@@ -362,6 +369,7 @@ const createConversation = async (id, friendId) => {
         },
         body: JSON.stringify({
             name: `${id} & ${friendId}`,
+            participants: [ id, friendId ],
             messages: []
         })
     });
@@ -408,6 +416,7 @@ const setCurrentConversation = async (event) => {
     currentConversation = new Conversation(
         conversation._id,
         conversation.name,
+        conversation.participants,
         conversation.messages
     );
 
@@ -440,6 +449,7 @@ const sendMessage = (event) => {
     currentConversation.messages.push(body);
 
     // Update friend's client.
+    socket.emit("send-message", currentConversation._id, currentConversation.participants, body);
 
     // Re-draw current conversation.
     drawCurrentConversation(currentConversation);

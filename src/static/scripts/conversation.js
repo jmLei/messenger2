@@ -1,7 +1,8 @@
 export default class Conversation {
-    constructor(_id, name, messages) {
+    constructor(_id, name, participants, messages) {
         this._id = _id;
         this.name = name;
+        this.participants = participants;
         this.messages = messages;
     }
 }
