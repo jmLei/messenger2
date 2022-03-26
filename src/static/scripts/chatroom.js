@@ -45,12 +45,34 @@ const main = async () => {
     const sendMessageButton = document.getElementById("send-message");
     sendMessageButton.addEventListener("click", sendMessage);
 
+    socket.on("conversation-joined", (conversationId) => {
+        currentUser.conversations.push(conversationId);
+        drawConversationList(currentUser.conversations);
+    });
+
+    socket.on("friend-request-accepted", (emitterId) => {
+        const index = currentUser.outgoingFriendRequests.indexOf(emitterId);
+        
+        if(index > -1) {
+            currentUser.outgoingFriendRequests.splice(index, 1);
+            drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
+        }
+
+        currentUser.friendList.push(emitterId);
+        drawFriendList(currentUser.friendList);
+    });
+
     socket.on("friend-request-cancelled", (emitterId) => {
         const index = currentUser.incomingFriendRequests.indexOf(emitterId);
         if(index > -1) {
             currentUser.incomingFriendRequests.splice(index, 1);
             drawIncomingFriendRequests(currentUser.incomingFriendRequests);
         }
+    });
+
+    socket.on("friend-request-received", (emitterId) => {
+        currentUser.incomingFriendRequests.push(emitterId);
+        drawIncomingFriendRequests(currentUser.incomingFriendRequests);
     });
 
     socket.on("friend-request-rejected", (emitterId) => {
@@ -60,12 +82,6 @@ const main = async () => {
             drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
         }
     })
-
-    socket.on("receive-friend-request", (emitterId) => {
-        currentUser.incomingFriendRequests.push(emitterId);
-        drawIncomingFriendRequests(currentUser.incomingFriendRequests);
-    })
-
 };
 
 const drawOutgoingFriendRequests = (outgoingFriendRequests) => {
@@ -218,6 +234,8 @@ const acceptFriendRequest = (event) => {
     currentUser.friendList.push(friendId);
     drawIncomingFriendRequests(currentUser.incomingFriendRequests);
     drawFriendList(currentUser.friendList);
+
+    socket.emit("accept-friend-request", [currentUser._id, friendId]);
 };
 
 const rejectFriendRequest = (event) => {
@@ -377,11 +395,15 @@ const createConversation = async (id, friendId) => {
 
     currentUser.conversations.push(conversationId);
     drawConversationList(currentUser.conversations);
+
+    socket.emit("join-conversation", friendId, conversationId);
 }
 
-const setCurrentConversation = (event) => {
+const setCurrentConversation = async (event) => {
     console.log("Set Current Conversation");
-    const conversation = event.target.conversation;
+    const conversationId = event.target.conversation._id;
+    const response = await fetch(`http://localhost:8080/conversations/${conversationId}`);
+    const conversation = await response.json();
 
     currentConversation = new Conversation(
         conversation._id,

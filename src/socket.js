@@ -32,11 +32,23 @@ const initIOServer = (httpServer) => {
             console.log(users);
         });
 
+        socket.on("accept-friend-request", (ids) => {
+            for(let i = 0; i < users.get(ids[1]).length; i++) {
+                io.to(users.get(ids[1])[i]).emit("friend-request-accepted", ids[0]);
+            }
+        });
+
         socket.on("cancel-friend-request", (ids) => {
             for(let i = 0; i < users.get(ids[1]).length; i++) {
                 io.to(users.get(ids[1])[i]).emit("friend-request-cancelled", ids[0]);
             }
         });
+
+        socket.on("join-conversation", (friendId, conversationId) => {
+            for(let i = 0; i < users.get(friendId).length; i++) {
+                io.to(users.get(friendId)[i]).emit("conversation-joined", conversationId);
+            }
+        })
 
         socket.on("reject-friend-request", (ids) => {
             for(let i = 0; i < users.get(ids[1]).length; i++) {
@@ -46,7 +58,7 @@ const initIOServer = (httpServer) => {
 
         socket.on("send-friend-request", (ids) => {
             for(let i = 0; i < users.get(ids[1]).length; i++) {
-                io.to(users.get(ids[1])[i]).emit("receive-friend-request", ids[0]);
+                io.to(users.get(ids[1])[i]).emit("friend-request-received", ids[0]);
             }
         });
     });
