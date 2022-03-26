@@ -8,6 +8,8 @@ const main = async () => {
     if(localStorage.getItem("id") === null) {
         window.location.replace("http://localhost:8080/index.html");
     }
+
+    const socket = io();
     
     // Get user info.
     let response = await fetch(`http://localhost:8080/users/${localStorage.getItem("id")}`);

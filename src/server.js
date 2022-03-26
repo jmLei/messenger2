@@ -199,3 +199,5 @@ const server = http.createServer(async (req, res) => {
         console.log(`Server listening on port ${port}.`)
     }
 });
+
+const io = require("./socket.js")(server);
