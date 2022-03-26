@@ -12,7 +12,10 @@ module.exports = {
                 res.write(error);
                 res.end();
             } else {
-                document.messages.push(value);
+                console.log(document);
+                console.log(JSON.parse(value));
+                document.messages.push(JSON.parse(value));
+                console.log(document);
                 document.save((error) => {
                     if(error) {
                         res.writeHead(409, {"Content-Type": "text/plain"});

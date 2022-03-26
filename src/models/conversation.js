@@ -1,14 +1,14 @@
 const mongoose = require("mongoose"); // Importing the mongoose package
 
+const messageSchema = new mongoose.Schema({
+    timestamp: Date,
+    from: String,
+    body: String
+})
+
 const conversationSchema = new mongoose.Schema({
     name: String,
-    messages: [
-        { 
-            timestamp: Date, 
-            from: String,
-            body: String
-        }
-    ]
+    messages: [messageSchema]
 });
 
 // Exporting conversation model.

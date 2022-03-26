@@ -180,12 +180,13 @@ const server = http.createServer(async (req, res) => {
     // PATCH /conversations/{conversationId}
     // Adds a message to a conversation document.
     else if(method === "PATCH" && resource === "conversations" && id !== "") {
+        
         HelperFunctions.parseBody(req, (body) => {
 
             const op = body.op;
             const path = body.path;
             const value = body.value;
-
+            
             if(op === "add" && path === "/messages") {
                 conversationController.addMessage(value, id, res);
             }

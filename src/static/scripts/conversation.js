@@ -1,19 +1,19 @@
 export default class Conversation {
     constructor(_id, name, messages) {
-        this._id = id;
+        this._id = _id;
         this.name = name;
         this.messages = messages;
     }
 }
 
 export const createMessageElements = (messages) => {
-    const elements = [];
+    const div = document.createElement("div");
 
     for(let i = 0; i < messages.length; i++) {
         const element = createMessageElement(messages[i]);
-        elements.push(element);
+        div.appendChild(element);
     }
-    return elements;
+    return div;
 }
 
 // Message format: { 

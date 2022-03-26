@@ -36,6 +36,9 @@ const main = async () => {
     const sendFriendRequestButton = document.getElementById("send-friend-request-button");
     sendFriendRequestButton.addEventListener("click", sendFriendRequest);
 
+    const sendMessageButton = document.getElementById("send-message");
+    sendMessageButton.addEventListener("click", sendMessage);
+
 };
 
 const drawOutgoingFriendRequests = (outgoingFriendRequests) => {
@@ -111,7 +114,22 @@ const drawConversationList = async (conversationIds) => {
 };
 
 const drawCurrentConversation = (currentConversation) => {
+    console.log(currentConversation);
+    const container = document.getElementById("current-conversation");
 
+
+    while(container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+
+    const h1 = document.createElement("h1");
+    h1.innerText = currentConversation.name;
+
+    const messages = createMessageElements(currentConversation.messages);
+
+    container.appendChild(h1);
+    container.appendChild(messages);
+    
 }
 
 const acceptFriendRequest = (event) => {
@@ -329,7 +347,7 @@ const createConversation = async (id, friendId) => {
 
 const setCurrentConversation = (event) => {
     console.log("Set Current Conversation");
-    const conversation = event.target.conservation;
+    const conversation = event.target.conversation;
 
     currentConversation = new Conversation(
         conversation._id,
@@ -337,6 +355,37 @@ const setCurrentConversation = (event) => {
         conversation.messages
     );
 
+    drawCurrentConversation(currentConversation);
+}
+
+const sendMessage = (event) => {
+    const message = document.getElementById("message-field").value;
+    
+    const body = {
+        timestamp: new Date(),
+        from: currentUser._id,
+        body: message
+    };
+
+    // Send message to database.
+    fetch(`http://localhost:8080/conversations/${currentConversation._id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            op: "add",
+            path: "/messages",
+            value: JSON.stringify(body)
+        })
+    });
+
+    // Update client.
+    currentConversation.messages.push(body);
+
+    // Update friend's client.
+
+    // Re-draw current conversation.
     drawCurrentConversation(currentConversation);
 }
 
