@@ -10,6 +10,7 @@ const main = async () => {
     }
 
     const socket = io();
+    socket.emit("send-user-id", localStorage.getItem("id"));
     
     // Get user info.
     let response = await fetch(`http://localhost:8080/users/${localStorage.getItem("id")}`);
@@ -27,11 +28,13 @@ const main = async () => {
     const text = document.createTextNode(`Welcome back, ${currentUser._id}`);
     header.prepend(text);
 
+    // Update the view.
     drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);
     drawIncomingFriendRequests(currentUser.incomingFriendRequests);
     drawFriendList(currentUser.friendList);
     drawConversationList(currentUser.conversations);
     
+    // Add functionalities to buttons.
     const logoutButton = document.getElementById("logout-button");
     logoutButton.addEventListener("click", onLogoutButtonClick);
 
