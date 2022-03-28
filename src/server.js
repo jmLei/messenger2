@@ -9,8 +9,6 @@ const userController = require("./controller/userController");
 
 const HelperFunctions = require("./util/helperFunctions");
 
-const port = 8080;
-
 mongoose.connect(process.env.MONGODB_URL)
 const db = mongoose.connection
 
@@ -191,7 +189,7 @@ const server = http.createServer(async (req, res) => {
             }
         });
     }
-}).listen(port, (error) => {
+}).listen(process.env.PORT || 8080, (error) => {
     if(error) {
         console.log("Error: ", error)
     } else {
