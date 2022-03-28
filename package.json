@@ -5,6 +5,6 @@
     "socket.io-client": "^4.4.1"
   },
   "devDependencies": {
-    "nodemon": "^1.11.1"
+    "nodemon": "^1.19.4"
   }
 }
