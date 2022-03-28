@@ -193,7 +193,7 @@ const server = http.createServer(async (req, res) => {
     if(error) {
         console.log("Error: ", error)
     } else {
-        console.log(`Server listening on port ${port}.`)
+        console.log(`Server listening on port ${process.env.PORT || 8080}.`)
     }
 });
 
