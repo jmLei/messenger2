@@ -10,9 +10,7 @@ const HelperFunctions = require("./util/helperFunctions");
 
 const port = 8080;
 
-// Connects to MongoDB database named "messenger"
-// located at localhost:27017
-mongoose.connect("mongodb://127.0.0.1:27017/messenger")
+mongoose.connect("mongodb+srv://root:44cUzJjjvgoDVxZq@messenger-cluster.racmb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 const db = mongoose.connection
 
 db.on("error", (error) => {
