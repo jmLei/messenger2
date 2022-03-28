@@ -1,6 +1,7 @@
 const http = require("http");         
 const fs = require("fs");         
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 // Importing controllers
 const conversationController = require("./controller/conversationController");
@@ -10,7 +11,7 @@ const HelperFunctions = require("./util/helperFunctions");
 
 const port = 8080;
 
-mongoose.connect("mongodb+srv://root:44cUzJjjvgoDVxZq@messenger-cluster.racmb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+mongoose.connect(process.env.MONGODB_URL)
 const db = mongoose.connection
 
 db.on("error", (error) => {
