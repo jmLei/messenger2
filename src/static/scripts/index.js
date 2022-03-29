@@ -3,7 +3,7 @@ const main = () => {
     // If user is logged in, then go to chatroom.html
     // Otherwise, do nothing
     if(localStorage.getItem("id") !== null) {
-        window.location.replace("http://localhost:8080/chatroom.html");
+        window.location.replace(`${process.env.HOST}/chatroom.html`);
     }
 
     const button = document.getElementById("login-form-button");
@@ -18,11 +18,11 @@ const onClick = async (event) => {
     const id = document.getElementById("name").value;
 
     // Check if id already exists
-    const response = await fetch(`http://localhost:8080/users/${id}`, { method: "HEAD"});
+    const response = await fetch(`${window.location.origin}/users/${id}`, { method: "HEAD"});
 
     // if id does not exist, create new user document
     if(response.status === 404) {
-        await fetch("http://localhost:8080/users", {
+        await fetch(`${window.location.origin}/users`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -39,7 +39,7 @@ const onClick = async (event) => {
     localStorage.setItem("id", id);
 
     // Redirect
-    window.location.replace("http://localhost:8080/chatroom.html");
+    window.location.replace(`${window.location.origin}/chatroom.html`);
 }
 
 main();

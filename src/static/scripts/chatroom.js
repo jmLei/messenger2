@@ -7,14 +7,14 @@ var socket;
 
 const main = async () => {
     if(localStorage.getItem("id") === null) {
-        window.location.replace("http://localhost:8080/index.html");
+        window.location.replace(`${window.location.origin}/index.html`);
     }
 
     socket = io();
     socket.emit("send-user-id", localStorage.getItem("id"));
     
     // Get user info.
-    let response = await fetch(`http://localhost:8080/users/${localStorage.getItem("id")}`);
+    let response = await fetch(`${window.location.origin}/users/${localStorage.getItem("id")}`);
     response = await response.json();
 
     currentUser = new User(
@@ -144,7 +144,7 @@ const drawConversationList = async (conversationIds) => {
     const conversations = [];
 
     for(let i = 0; i < conversationIds.length; i++) {
-        const response = await fetch(`http://localhost:8080/conversations/${conversationIds[i]}`);
+        const response = await fetch(`${window.location.origin}/conversations/${conversationIds[i]}`);
         const conversation = await response.json();
         conversations.push(conversation);
     }
@@ -186,7 +186,7 @@ const acceptFriendRequest = (event) => {
 
     const friendId = event.target.friendId;
 
-    fetch(`http://localhost:8080/users/${friendId}`, {
+    fetch(`${window.location.origin}/users/${friendId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -198,7 +198,7 @@ const acceptFriendRequest = (event) => {
         })
     });
 
-    fetch(`http://localhost:8080/users/${currentUser._id}`, {
+    fetch(`${window.location.origin}/users/${currentUser._id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -210,7 +210,7 @@ const acceptFriendRequest = (event) => {
         })
     });
 
-    fetch(`http://localhost:8080/users/${currentUser._id}`, {
+    fetch(`${window.location.origin}/users/${currentUser._id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -222,7 +222,7 @@ const acceptFriendRequest = (event) => {
         })
     });
 
-    fetch(`http://localhost:8080/users/${friendId}`, {
+    fetch(`${window.location.origin}/users/${friendId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -250,7 +250,7 @@ const rejectFriendRequest = (event) => {
 
     const friendId = event.target.friendId;
 
-    fetch(`http://localhost:8080/users/${friendId}`, {
+    fetch(`${window.location.origin}/users/${friendId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -262,7 +262,7 @@ const rejectFriendRequest = (event) => {
         })
     });
 
-    fetch(`http://localhost:8080/users/${currentUser._id}`, {
+    fetch(`${window.location.origin}/users/${currentUser._id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -284,7 +284,7 @@ const rejectFriendRequest = (event) => {
 const cancelFriendRequest = (event) => {
     const friendId = event.target.friendId;
     
-    fetch(`http://localhost:8080/users/${friendId}`, {
+    fetch(`${window.location.origin}/users/${friendId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -296,7 +296,7 @@ const cancelFriendRequest = (event) => {
         })
     });
 
-    fetch(`http://localhost:8080/users/${localStorage.getItem("id")}`, {
+    fetch(`${window.location.origin}/users/${localStorage.getItem("id")}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -318,7 +318,7 @@ const cancelFriendRequest = (event) => {
 const onLogoutButtonClick = (event) => {
     event.preventDefault();
     localStorage.removeItem("id");
-    window.location.replace("http://localhost:8080/index.html");
+    window.location.replace(`${window.location.origin}/index.html`);
 };
 
 const sendFriendRequest = async (event) => {
@@ -326,7 +326,7 @@ const sendFriendRequest = async (event) => {
     
     const friendId = document.getElementById("friend-id").value;
 
-    await fetch(`http://localhost:8080/users/${friendId}`, {
+    await fetch(`${window.location.origin}/users/${friendId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -339,7 +339,7 @@ const sendFriendRequest = async (event) => {
     });
 
     // Update server about adding to outgoing friend requests list
-    await fetch(`http://localhost:8080/users/${localStorage.getItem("id")}`, {
+    await fetch(`${window.location.origin}/users/${localStorage.getItem("id")}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -362,7 +362,7 @@ const sendFriendRequest = async (event) => {
 
 const createConversation = async (id, friendId) => {
 
-    let conversation = await fetch("http://localhost:8080/conversations", {
+    let conversation = await fetch(`${window.location.origin}/conversations`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -377,7 +377,7 @@ const createConversation = async (id, friendId) => {
     conversation = await conversation.json();
     const conversationId = conversation._id;
 
-    await fetch(`http://localhost:8080/users/${friendId}`, {
+    await fetch(`${window.location.origin}/users/${friendId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -389,7 +389,7 @@ const createConversation = async (id, friendId) => {
         })
     });
 
-    await fetch(`http://localhost:8080/users/${id}`, {
+    await fetch(`${window.location.origin}/users/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -410,7 +410,7 @@ const createConversation = async (id, friendId) => {
 const setCurrentConversation = async (event) => {
     console.log("Set Current Conversation");
     const conversationId = event.target.conversation._id;
-    const response = await fetch(`http://localhost:8080/conversations/${conversationId}`);
+    const response = await fetch(`${window.location.origin}/conversations/${conversationId}`);
     const conversation = await response.json();
 
     currentConversation = new Conversation(
@@ -433,7 +433,7 @@ const sendMessage = (event) => {
     };
 
     // Send message to database.
-    fetch(`http://localhost:8080/conversations/${currentConversation._id}`, {
+    fetch(`${window.location.origin}/conversations/${currentConversation._id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
