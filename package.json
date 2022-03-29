@@ -9,6 +9,7 @@
     "socket.io-client": "^4.4.1"
   },
   "devDependencies": {
+    "cypress": "^9.5.3",
     "nodemon": "^1.19.4"
   }
 }
