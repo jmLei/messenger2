@@ -25,9 +25,9 @@ const main = async () => {
         response.conversations
     );
 
-    const header = document.getElementById("my-header");
+    const greeting = document.getElementById("greeting");
     const text = document.createTextNode(`Welcome back, ${currentUser._id}`);
-    header.prepend(text);
+    greeting.prepend(text);
 
     // Update the view.
     drawOutgoingFriendRequests(currentUser.outgoingFriendRequests);

@@ -2,6 +2,7 @@
 body {
   font-family: "Roboto";
   text-align: center;
+  overflow: hidden;
 }
 
 .login {
@@ -16,6 +17,7 @@ body {
 }
 
 /* Login Form */
+
 .login-form {
   font-weight: bold;
   margin: 10px;
@@ -70,6 +72,8 @@ body {
 
 .chatroom-container .right-panel {
   width: 25vw;
+  height: 95vh;
+  overflow-y: auto;
 }
 
 .box {
