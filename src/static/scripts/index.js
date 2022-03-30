@@ -2,9 +2,11 @@ const main = () => {
     // Check if user is logged in
     // If user is logged in, then go to chatroom.html
     // Otherwise, do nothing
-    if(localStorage.getItem("id") !== null) {
-        window.location.replace(`${process.env.HOST}/chatroom.html`);
-    }
+    // if(localStorage.getItem("id") !== null) {
+    //     window.location.replace(`${window.location.origin}/chatroom.html`);
+    // }
+
+    localStorage.setItem("id", null);
 
     const button = document.getElementById("login-form-button");
     button.addEventListener("click", onClick);

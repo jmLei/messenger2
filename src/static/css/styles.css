@@ -4,16 +4,6 @@ body {
   text-align: center;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Roboto", sans-serif;
-  font-weight: bold;
-}
-
 .login {
   padding: 40px 20px;
   margin: 200px auto;
@@ -71,15 +61,15 @@ h6 {
 }
 
 .chatroom-container .left-panel {
-  width: 30vw;
+  width: 25vw;
 }
 
 .chatroom-container .center-panel {
-  width: 40vw;
+  width: 50vw;
 }
 
 .chatroom-container .right-panel {
-  width: 30vw;
+  width: 25vw;
 }
 
 .box {
@@ -89,11 +79,17 @@ h6 {
   justify-content: space-between;
 }
 
-#conversation-form {
-  border: 1px solid black;
-}
-
 .conversation {
   height: 50px;
   width: 100%;
+}
+
+.heading {
+  border: 1px solid black;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#conversation-form {
+  border: 1px solid black;
 }
