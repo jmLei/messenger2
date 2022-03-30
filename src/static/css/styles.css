@@ -59,11 +59,13 @@ body {
 /****** Chatroom.html ******/
 
 .chatroom-container {
-  display: flex
+  display: flex;
+  max-height: 90vh;
 }
 
 .chatroom-container .left-panel {
   width: 25vw;
+  overflow-y: auto;
 }
 
 .chatroom-container .center-panel {
@@ -72,7 +74,6 @@ body {
 
 .chatroom-container .right-panel {
   width: 25vw;
-  height: 95vh;
   overflow-y: auto;
 }
 
@@ -96,4 +97,9 @@ body {
 
 #conversation-form {
   border: 1px solid black;
+}
+
+#current-conversation {
+  overflow-y: auto;
+  height: 70vh;
 }

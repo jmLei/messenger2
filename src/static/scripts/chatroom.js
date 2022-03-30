@@ -424,6 +424,13 @@ const setCurrentConversation = async (event) => {
 }
 
 const sendMessage = (event) => {
+
+    if(currentConversation === undefined) {
+        console.log("Cannot send message. No conversation selected.");
+        document.getElementById("message-field").value = "";
+        return;
+    }
+
     const message = document.getElementById("message-field").value;
     
     const body = {
@@ -453,6 +460,7 @@ const sendMessage = (event) => {
 
     // Re-draw current conversation.
     drawCurrentConversation(currentConversation);
+    document.getElementById("message-field").value = "";
 }
 
 main();
