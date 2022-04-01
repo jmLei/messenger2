@@ -95,6 +95,10 @@ body {
   padding-bottom: 10px;
 }
 
+.message {
+  border: 1px solid black;
+}
+
 #conversation-form {
   border: 1px solid black;
 }
@@ -102,4 +106,5 @@ body {
 #current-conversation {
   overflow-y: auto;
   height: 70vh;
+  text-align: left;
 }

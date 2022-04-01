@@ -24,13 +24,18 @@ export const createMessageElements = (messages) => {
 // }
 const createMessageElement = (message) => {
     const div = document.createElement("div");
-    const h3 = document.createElement("h3");
-    h3.innerText = `${message.timestamp} ${message.from}`;
-    const p = document.createElement("p");
-    p.innerText = message.body;
+    const name = document.createElement("p");
+    const time = document.createElement("p");
+    const body = document.createElement("p");
 
-    div.appendChild(h3);
-    div.appendChild(p);
+    div.classList.add("message");
+    name.innerText = message.from;
+    time.innerText = message.timestamp
+    body.innerText = message.body;
+
+    div.appendChild(name);
+    div.appendChild(time);
+    div.appendChild(body);
 
     return div;
 };

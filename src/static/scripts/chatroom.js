@@ -172,12 +172,7 @@ const drawCurrentConversation = (currentConversation) => {
         container.removeChild(container.firstChild);
     }
 
-    const h1 = document.createElement("h1");
-    h1.innerText = currentConversation.name;
-
     const messages = createMessageElements(currentConversation.messages);
-
-    container.appendChild(h1);
     container.appendChild(messages);
     
 }
@@ -419,7 +414,8 @@ const setCurrentConversation = async (event) => {
         conversation.participants,
         conversation.messages
     );
-
+    
+    document.getElementById("conversation-name").innerText = conversation.name;
     drawCurrentConversation(currentConversation);
 }
 

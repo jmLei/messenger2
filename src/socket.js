@@ -33,39 +33,50 @@ const initIOServer = (httpServer) => {
         });
 
         socket.on("accept-friend-request", (ids) => {
-            for(let i = 0; i < users.get(ids[1]).length; i++) {
-                io.to(users.get(ids[1])[i]).emit("friend-request-accepted", ids[0]);
+
+            if(users.has(ids[1])) {
+                for(let i = 0; i < users.get(ids[1]).length; i++) {
+                    io.to(users.get(ids[1])[i]).emit("friend-request-accepted", ids[0]);
+                }
             }
         });
 
         socket.on("cancel-friend-request", (ids) => {
-            for(let i = 0; i < users.get(ids[1]).length; i++) {
-                io.to(users.get(ids[1])[i]).emit("friend-request-cancelled", ids[0]);
+            if(users.has(ids[1])) {
+                for(let i = 0; i < users.get(ids[1]).length; i++) {
+                    io.to(users.get(ids[1])[i]).emit("friend-request-cancelled", ids[0]);
+                }
             }
         });
 
         socket.on("join-conversation", (friendId, conversationId) => {
-            for(let i = 0; i < users.get(friendId).length; i++) {
-                io.to(users.get(friendId)[i]).emit("conversation-joined", conversationId);
+            if(users.has(friendId)) {
+                for(let i = 0; i < users.get(friendId).length; i++) {
+                    io.to(users.get(friendId)[i]).emit("conversation-joined", conversationId);
+                }
             }
-        })
+        });
 
         socket.on("reject-friend-request", (ids) => {
-            for(let i = 0; i < users.get(ids[1]).length; i++) {
-                io.to(users.get(ids[1])[i]).emit("friend-request-rejected", ids[0]);
+            if(users.has(ids[1])) {
+                for(let i = 0; i < users.get(ids[1]).length; i++) {
+                    io.to(users.get(ids[1])[i]).emit("friend-request-rejected", ids[0]);
+                }
             }
-        })
+        });
 
         socket.on("send-friend-request", (ids) => {
-            for(let i = 0; i < users.get(ids[1]).length; i++) {
-                io.to(users.get(ids[1])[i]).emit("friend-request-received", ids[0]);
+            if(users.has(ids[1])) {
+                for(let i = 0; i < users.get(ids[1]).length; i++) {
+                    io.to(users.get(ids[1])[i]).emit("friend-request-received", ids[0]);
+                }
             }
         });
 
         socket.on("send-message", (conversationId, participants, message) => {
 
             for(let j = 0; j < participants.length; j++) {
-                if(participants[j] !== message.from) {
+                if(participants[j] !== message.from && users.has(participants[j])) {
                     for(let i = 0; i < users.get(participants[j]).length; i++) {
                         io.to(users.get(participants[j])[i]).emit("message-received", conversationId, message);
                     }
