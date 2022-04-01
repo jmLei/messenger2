@@ -11,9 +11,11 @@ const onClick = async (event) => {
 
     // Get id user entered into textfield
     const id = document.getElementById("name").value;
+    const error = document.getElementById("error");
 
     if(! id.match("^[A-Za-z0-9]+$")) {
         console.log("Id can only contain letters and numbers.");
+        error.innerText = "ID can only contain alphanumeric characters.";
     }
     else {
         // Check if id already exists
