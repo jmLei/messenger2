@@ -8,6 +8,7 @@
 
     <!-- CSS Stylesheets -->
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/index.css"/>
 
     <!-- Javascript files -->
     <script type="module" src="scripts/index.js"></script>
@@ -24,17 +25,15 @@
   <body>
     <!-- Need a form with a textfield and button. -->
     <!-- User inputs their ID in the textfield to proceed to the chatroom page -->
-    <div class="login">
-      <form action="post">
-        <div class="login-form">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" required />
-        </div>
-        <div id="error"></div>
-        <div class="login-form">
-          <button type="submit" id="login-form-button">Submit</button>
-        </div>
-      </form>
+    <div id="index-container">
+        <h2>Messenger</h2>
+        <form action="post">
+          <div>
+            <input type="text" id="index-id" placeholder="ID" required />
+            <button type="submit" id="index-button">Submit</button>
+          </div>
+          <div id="error"></div>
+        </form>
     </div>
   </body>
 </html>

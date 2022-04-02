@@ -53,8 +53,8 @@ const server = http.createServer(async (req, res) => {
             }
         });
     }
-    else if(req.url === "/css/styles.css") {
-        fs.readFile("./src/static/css/styles.css", (error, css) => {
+    else if(req.url.includes(".css")) {
+        fs.readFile(`./src/static${req.url}`, (error, css) => {
             if(error) {
                 console.log(error);
             } else {
