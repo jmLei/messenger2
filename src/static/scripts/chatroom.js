@@ -93,7 +93,7 @@ const main = async () => {
 
 const drawOutgoingFriendRequests = (outgoingFriendRequests) => {
     console.log("Draw Outgoing Friend Requests");
-    const outgoingFriendRequestsContainer = document.getElementById("outgoing-friend-requests-container");
+    const outgoingFriendRequestsContainer = document.getElementById("outgoing-friend-requests");
 
     // Clear out outgoingFriendRequestsContainer
     while(outgoingFriendRequestsContainer.firstChild) {

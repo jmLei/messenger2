@@ -28,26 +28,34 @@
         <button type="submit" id="logout-button">Logout</button>
     </header>
     <div id="chatroom-container">
-        <div class="left-panel">
-            <h1 class="heading">Conversations</h1>
+
+        <div id="chatroom-left-panel">
+            <h2>Conversations</h2>
             <div id="conversation-list"></div>
         </div>
-        <div class="center-panel">
-            <h1 id="conversation-name"></h1>
+
+        <div id="chatroom-center-panel">
+            <h2 id="conversation-name"></h2>
             <div id="current-conversation"></div>
             <div>
                 <input type="text" id="message-field">
                 <button id="send-message">Send</button>
             </div>
         </div>
-        <div class="right-panel">
-            <h1 class="heading">Friend List</h1>
+        
+        <div id="chatroom-right-panel">
+
+            <h2>Friend List</h2>
             <div id="friend-list"></div>
-            <h1 class="heading">Incoming Friend Requests</h1>
-            <div id="incoming-friend-requests">
-            </div>
-            <h1 class="heading">Outgoing Friend Requests</h1>
-            <div id="outgoing-friend-requests-container"></div>
+
+
+            <h2>Incoming Friend Requests</h2>
+            <div id="incoming-friend-requests"></div>
+
+
+            <h2>Outgoing Friend Requests</h2>
+            <div id="outgoing-friend-requests"></div>
+
             <form class="box friend-panel">
                 <label for="friend-id">Friend ID</label>
                 <input type="text" name="friend-id" id="friend-id" required>
