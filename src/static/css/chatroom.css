@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -10,7 +14,7 @@ html, body {
 
 .conversation {
     height: 75px;
-    width: 23vw;
+    width: 90%;
     
 }
 
@@ -45,4 +49,30 @@ html, body {
     border: 1px solid black;
     height: 95vh;
     width: 25vw;
+    overflow-y: scroll;
+}
+
+#current-conversation {
+    height: 85%;
+    overflow-y: scroll;
+}
+
+#conversation-name {
+    height: 10%;
+    margin: 0;
+}
+
+#message-interface {
+    display: flex;
+    justify-content: center;
+    height: 5%;
+    width: 100%;
+}
+
+#message-field {
+    flex-grow: 1;
+}
+
+#friend-id {
+    width: 100%;
 }
